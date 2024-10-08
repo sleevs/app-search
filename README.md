@@ -23,7 +23,7 @@ Pré-requisitos
 
 
 
-#Executar os comandos maven :
+# Executar os comandos maven :
 
  mvn clean install
    
@@ -31,7 +31,7 @@ Pré-requisitos
  
  
  
-#Para executar a aplicação com Docker :
+# Para executar a aplicação com Docker :
  
  docker build . -t jsn-search-app
 
@@ -42,12 +42,12 @@ Pré-requisitos
 # Para acessar a API da aplicação:
 http://127.0.0.1:4567/jsn-search/swagger-ui/index.html
 
-![API do Sistema](dir/imag0.png)
+![API do Sistema](dir/img0.png)
 
-![API do Sistema](dir/imag1.png)
+![API do Sistema](dir/img1.png)
 
-![API do Sistema](dir/imag2.png)
+![API do Sistema](dir/img2.png)
 
-![API do Sistema](dir/imag3.png)
+![API do Sistema](dir/img3.png)
 
-![API do Sistema](dir/imag4.png)
+![API do Sistema](dir/img4.png)
