@@ -30,23 +30,23 @@ public class SearchController {
     
 
     @Operation(
-    summary = "buscar operation",
-    description = "Realiza buscar em sites.",
-    tags = {"buscar operation"}
+    summary = "Realizar Busca",
+    description = "Informe um termo(palavra-chave) e uma URL para fazer a busca no Web Site.",
+    tags = {"Operação de busca"}
         )
     @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "busca realizado com sucesso"),
+    @ApiResponse(responseCode = "200", description = "Busca realizado com sucesso"),
     @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
     @PostMapping
-    public ResponseEntity<Object> startSearch(@RequestParam String term, @RequestParam String url) {
+    public ResponseEntity<Object> startSearch(@RequestParam String termo, @RequestParam String url) {
 
          try {
-            if (term.length() < 4 || term.length() > 32 || term == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ternmo de buscar deve ter entre 4 até 32 caracteres.");
+            if (termo.length() < 4 || termo.length() > 32 || termo == null || termo.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O ternmo de busca deve ter entre 4 até 32 caracteres.");
             }
             
-            return ResponseEntity.ok(searchService.startSearch(term, url));
+            return ResponseEntity.ok(searchService.startSearch(termo, url));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor.");
         }
@@ -54,7 +54,15 @@ public class SearchController {
        
     
 
-    
+    @Operation(
+    summary = "Consultar resultado",
+    description = "Informe o id retornado na Operação de Busca para consultar o resultado da busca.",
+    tags = {"Operação de consulta"}
+        )
+    @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Consulta realizada com sucesso"),
+    @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<SearchModel> getTasks(@PathVariable String id) {
         SearchModel searchModel = searchService.getSearchs().get(id);

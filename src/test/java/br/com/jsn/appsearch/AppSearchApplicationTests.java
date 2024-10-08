@@ -36,17 +36,17 @@ class AppSearchApplicationTests {
 
     @Test
     public void testStartSearch_withValidTerm_shouldReturnOk() throws Exception {
-        String term = "validTerm";
+        String termo = "validTerm";
         String url = "http://www.google.com";
 
         SearchModel model = new SearchModel();
         model.setKeyword(url);
         model.setId("1");
 
-        when(searchService.startSearch(term, url)).thenReturn(Collections.singletonList(model));
+        when(searchService.startSearch(termo, url)).thenReturn(Collections.singletonList(model));
 
         mockMvc.perform(post("/crawl")
-                .param("term", term)
+                .param("termo", termo)
                 .param("url", url)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -57,15 +57,15 @@ class AppSearchApplicationTests {
 
     @Test
     public void testStartSearch_withTermOver32Characters_shouldReturnBadRequest() throws Exception {
-        String term = "thisTermIsWayTooLongForValidation"; 
+        String termo = "thisTermIsWayTooLongForValidation"; 
         String url = "http://www.google.com";
 
         mockMvc.perform(post("/crawl")
-                .param("term", term)
+                .param("termo", termo)
                 .param("url", url)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("O ternmo de buscar deve ter entre 4 até 32 caracteres."));
+                .andExpect(content().string("O ternmo de busca deve ter entre 4 até 32 caracteres."));
     }
 
 
