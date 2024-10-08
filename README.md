@@ -40,14 +40,19 @@ Pré-requisitos
 
 
 # Para acessar a API da aplicação:
-http://127.0.0.1:4567/jsn-search/swagger-ui/index.html
+http://127.0.0.1:4567/app-search/swagger-ui/index.html
+
 
 ![API do Sistema](dir/img0.png)
 
+
 ![API do Sistema](dir/img1.png)
+
 
 ![API do Sistema](dir/img2.png)
 
+
 ![API do Sistema](dir/img3.png)
+
 
 ![API do Sistema](dir/img4.png)
