@@ -23,7 +23,7 @@ Pré-requisitos
 
 
 
-#Executar os comandos maven :
+# Executar os comandos maven :
 
  mvn clean install
    
@@ -31,7 +31,7 @@ Pré-requisitos
  
  
  
-#Para executar a aplicação com Docker :
+# Para executar a aplicação com Docker :
  
  docker build . -t jsn-search-app
 
