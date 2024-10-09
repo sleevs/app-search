@@ -7,17 +7,13 @@ public class SearchModel {
 
     private String id;
     private String keyword;
-    private String status = "active";
+    private String status;
     private List<String> urls = new CopyOnWriteArrayList<>();
 
     public SearchModel(){
 
     }
 
-    public SearchModel(String id, String keyword) {
-        this.id = id;
-        this.keyword = keyword;
-    }
 
     public String getId() {
         return id;

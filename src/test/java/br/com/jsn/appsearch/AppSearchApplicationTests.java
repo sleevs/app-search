@@ -9,11 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.util.Collections;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,8 +29,6 @@ class AppSearchApplicationTests {
 
     @MockBean
     private SearchService searchService;
-
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testStartSearch_withValidTerm_shouldReturnOk() throws Exception {
