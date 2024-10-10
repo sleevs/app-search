@@ -65,7 +65,7 @@ public class SearchController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<SearchModel> getTasks(@PathVariable String id) {
-        SearchModel searchModel = searchService.getSearchs().get(id);
+        SearchModel searchModel = searchService.getSearch().get(id);
         if (searchModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

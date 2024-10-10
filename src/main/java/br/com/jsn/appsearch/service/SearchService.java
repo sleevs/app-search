@@ -1,5 +1,6 @@
 package br.com.jsn.appsearch.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -7,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
@@ -14,18 +17,19 @@ import br.com.jsn.appsearch.model.SearchModel;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jsoup.HttpStatusException;
 
 
 @Service
 public class SearchService {
 
-
-    private ConcurrentHashMap<String, SearchModel> searchs = new ConcurrentHashMap<>();
+    private static final Logger logger = Logger.getLogger(SearchService.class.getName());
+    private ConcurrentHashMap<String, SearchModel> searchStorage = new ConcurrentHashMap<>();
     private final ExecutorService executorService = Executors.newCachedThreadPool();
-    private final List<SearchModel> tasks = new CopyOnWriteArrayList<>();
+    private final List<SearchModel> searchList = new CopyOnWriteArrayList<>();
 
 
-    public void performSearch(SearchModel task, String url) {
+    public void performSearch(SearchModel search, String url) {
         try {
             Document doc = Jsoup.connect(url).get();
          
@@ -33,11 +37,11 @@ public class SearchService {
 
          for (Element link : links) {
            
-             if (link.text().contains(task.getKeyword())) {
+             if (link.text().contains(search.getKeyword())) {
                  String nextUrl = link.absUrl("href");
               
-                 if (!task.getUrls().contains(nextUrl)) {
-                     task.getUrls().add(nextUrl);
+                 if (!search.getUrls().contains(nextUrl)) {
+                    search.getUrls().add(nextUrl);
                  }
              }
          }
@@ -48,26 +52,33 @@ public class SearchService {
          Elements sections = doc.select("section:has(a)");
          Elements footers = doc.select("footer:has(a)");
  
-         checkAndAddUrls(task, divs);
-         checkAndAddUrls(task, paragraphs);
-         checkAndAddUrls(task, spans);
-         checkAndAddUrls(task, sections);
-         checkAndAddUrls(task, footers);
+         checkAndAddUrls(search, divs);
+         checkAndAddUrls(search, paragraphs);
+         checkAndAddUrls(search, spans);
+         checkAndAddUrls(search, sections);
+         checkAndAddUrls(search, footers);
  
          for (Element link : links) {
              String nextUrl = link.absUrl("href");
  
            
-             if (nextUrl.startsWith(url) && !task.getUrls().contains(nextUrl)) {
+             if (nextUrl.startsWith(url) && !search.getUrls().contains(nextUrl)) {
                
-                 performSearch(task, nextUrl);
+                 performSearch(search, nextUrl);
              }
          }
 
             
+        } catch (HttpStatusException e) {
+            logger.log(Level.WARNING,  String.valueOf(e.getStatusCode()));
+            logger.log(Level.INFO, e.getUrl());
+        } catch (IOException e) {
+            logger.log(Level.WARNING,e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println( e.getMessage());
+            logger.log(Level.WARNING,e.getMessage());
         }
+        
     }
 
 
@@ -93,34 +104,35 @@ public class SearchService {
      public List<SearchModel> startSearch( String term, String url) {
 
 
-        SearchModel task = new SearchModel();
+        SearchModel search = new SearchModel();
         UUID generate = UUID.randomUUID();
-        task.setUrls(new ArrayList<>());
-        task.setKeyword(term);
-        task.setStatus("active");
-        task.setId(generate.toString().substring(0,8));
+        search.setId(generate.toString().substring(0,8));
+        search.setUrls(new ArrayList<>());
+        search.setKeyword(term);
+        search.setStatus("active");
+        
 
-        tasks.add(task);
-        searchs.put(task.getId(), task);
+        searchList.add(search);
+        searchStorage.put(search.getId(), search);
         executorService.submit(() -> {
             try {
-                performSearch(task, url);
+                performSearch(search, url);
             } finally {
-                task.setStatus("done");
+                search.setStatus("done");
             }
         });
 
-        return tasks;
+        return searchList;
     }
 
 
-    public ConcurrentHashMap<String, SearchModel> getSearchs() {
-        return searchs;
+    public ConcurrentHashMap<String, SearchModel> getSearch() {
+        return searchStorage;
     }
 
 
-    public void setSearchs(ConcurrentHashMap<String, SearchModel> searchs) {
-        this.searchs = searchs;
+    public void setSearch(ConcurrentHashMap<String, SearchModel> searchs) {
+        this.searchStorage = searchStorage;
     }
 
     
