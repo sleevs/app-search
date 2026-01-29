@@ -176,7 +176,7 @@ Separação clara entre controller, service e lógica de busca
 
 Persistência dos resultados em banco de dados
 
-Busca assíncrona com fila RabbitMQ
+Busca assíncrona com fila **java.util.concurrent.BlockingQueue**
 
 Paginação e filtros nos resultados
 
