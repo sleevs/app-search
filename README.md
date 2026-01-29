@@ -51,6 +51,8 @@ Java 17
 
 Spring Boot
 
+jsoup
+
 Maven
 
 Docker
@@ -63,7 +65,7 @@ Client (Swagger / API Consumer)
         ↓
 REST API (Spring Boot)
         ↓
-Search Service (Crawler)
+Search Service (jsoup / soft Crawler)
         ↓
 Resultados da busca
 
